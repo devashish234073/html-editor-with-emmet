@@ -23,5 +23,6 @@ Then from a browser you can access the service as:
 3. http://localhost:9090/test?type=json&exp=table>tr*3>td*3>lorem1
 4. http://localhost:9090/test?exp=table>tr*3>td*3>lorem1
 
-![image](https://user-images.githubusercontent.com/20777854/122639696-e0733900-d118-11eb-8b9d-dbe44fe86f56.png)
+Video demonstration of the application: https://www.youtube.com/watch?v=dPmCMvu639E
 
+![image](https://user-images.githubusercontent.com/20777854/122639696-e0733900-d118-11eb-8b9d-dbe44fe86f56.png)
