@@ -1,10 +1,14 @@
 {
   "name": "html-editor-with-emmet",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "This plugin hosts a webpage where one can make use of code completion using emmet for example table>tr*3>td*2 creates a table with 2 column and 3 rw",
   "main": "index.js",
   "scripts": {
     "test": "node index.js TEST p.test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devashish234073/html-editor-with-emmet.git"
   },
   "keywords": [
     "emmet",

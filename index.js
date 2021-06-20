@@ -41,7 +41,7 @@ function handleTestEndpoints(q, req, res) {
   lastEmmetExp = q.query.exp;
   if (type == "text/html") {
     var defaultValue = q.query.exp;
-    res.end(styleForHTML() + formToQueryEmmet(defaultValue) + "<textarea id='loremOutput' cols='51' rows='10'>" + expand + "</textarea><h1>Output:</h1>" + expand + scriptForHtml());
+    res.end(styleForHTML() + formToQueryEmmet(defaultValue) + "<textarea id='loremOutput' cols='51' rows='10'>" + expand + "</textarea><h1>Output:</h1><div id='outputHtml'>" + expand + "</div>" + scriptForHtml());
   } else if (type == "application/json") {
     res.end("{\"output\":\"" + expand + "\"}");
   } else if (type == "application/xml") {
@@ -66,16 +66,12 @@ function serverFunction(req, res) {
   }
 }
 
-function formToQueryEmmet(defaultValue, preventAutoSubmit) {
-  if (preventAutoSubmit == undefined) {
-    preventAutoSubmit = "";
-  }
+function formToQueryEmmet(defaultValue) {
   return `
   <form id="emmetTestForm" mathod="GET" action="test">
   <table>
   <tr><td colspan="2"><input type="hidden" name="type" value="html" style="text-align:center;font-size:20px" readonly></td></tr>
   <tr><td id="emmetExpTitle">Enter emmet expression: </td><td><input id="exp123123123" type="text" name="exp" value="${defaultValue}"></td></tr>
-  <tr><td colspan="2"><input type="checkbox" name="preventAutoSubmit">Prevent Auto Submit</td></tr>
   <tr><td colspan="2"><input type="submit" value="Expand"></td></tr>
   </table>
   </form>
@@ -88,10 +84,22 @@ function scriptForHtml() {
   var form = document.querySelector("#emmetTestForm");
   var emmetText = document.querySelector("#exp123123123");
   emmetText.addEventListener("keyup",function(){
-    form.submit();
+    //form.submit();
+    xhttp.open("GET", "test?type=xml&exp="+emmetText.value, true);
+    xhttp.send();
   });
+
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+       console.log(String(xhttp.responseText));
+       document.getElementById("loremOutput").value = String(xhttp.responseText);
+       document.getElementById("outputHtml").innerHTML = xhttp.responseText;
+    }
+  };
+
   emmetText.focus();
-  setTimeout(function(){ emmetText.selectionStart = emmetText.selectionEnd = 10000; }, 0);
+  //setTimeout(function(){ emmetText.selectionStart = emmetText.selectionEnd = 10000; }, 0);
   </script>
   `;
   return script;
@@ -139,7 +147,7 @@ function run(PORT) {
   url = require('url');
   var server = http.createServer(serverFunction);
   server.listen(PORT, function () {
-    console.log("started listening on: http://localhost:" + PORT);
+    console.log("started listening at PORT: " + PORT + ` visit http://localhost:${PORT}/test?exp=div.test&type=html to get started`);
   });
 }
 
